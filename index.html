@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Irrigation Dashboard</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg,#141e30,#243b55);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+
+.dashboard{
+  width:420px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter: blur(15px);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.5);
+}
+
+h1{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.clock{
+  text-align:center;
+  font-size:14px;
+  opacity:0.8;
+  margin-bottom:15px;
+}
+
+.moisture-box{
+  text-align:center;
+  margin:15px 0;
+}
+
+.moisture-value{
+  font-size:55px;
+  font-weight:bold;
+}
+
+.progress{
+  height:10px;
+  background:#333;
+  border-radius:10px;
+  margin-top:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:50%;
+  background:#00ff99;
+  transition:0.5s;
+}
+
+.status{
+  margin:15px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.badge{
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+.badge-on{ background:#00c853; }
+.badge-off{ background:#d50000; }
+
+.mode-toggle{
+  text-align:center;
+  margin:10px 0;
+}
+
+button{
+  padding:10px 20px;
+  margin:5px;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+  font-size:14px;
+  transition:0.3s;
+}
+
+.btn-on{ background:#00c853; color:white; }
+.btn-off{ background:#d50000; color:white; }
+.btn-mode{ background:#2979ff; color:white; }
+
+button:hover{
+  transform:scale(1.05);
+}
+
+.water-level{
+  margin-top:15px;
+}
+
+.water-bar{
+  height:8px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.water-fill{
+  height:100%;
+  width:70%;
+  background:#2196f3;
+  transition:0.5s;
+}
+
+.footer{
+  margin-top:15px;
+  text-align:center;
+  font-size:12px;
+  opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>🌱 Smart Irrigation</h1>
+
+<div class="clock" id="clock"></div>
+
+<div class="moisture-box">
+  <div class="moisture-value" id="moisture">--%</div>
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</div>
+
+<div class="status">
+  <div>Pump Status:</div>
+  <div id="pumpBadge" class="badge badge-off">OFF</div>
+</div>
+
+<div class="mode-toggle">
+  <button class="btn-mode" onclick="toggleMode()">Auto Mode</button>
+</div>
+
+<div style="text-align:center;">
+  <button class="btn-on" onclick="pumpOn()">ON</button>
+  <button class="btn-off" onclick="pumpOff()">OFF</button>
+</div>
+
+<div class="water-level">
+  <div style="font-size:13px;margin-bottom:5px;">Water Tank Level</div>
+  <div class="water-bar">
+    <div class="water-fill" id="waterFill"></div>
+  </div>
+</div>
+
+<div class="footer">
+  Developed by Akhil | Smart Agriculture System
+</div>
+
+</div>
+
+<script>
+
+let autoMode = false;
+let pumpState = false;
+
+// Clock
+function updateClock(){
+  let now = new Date();
+  document.getElementById("clock").innerText = now.toLocaleString();
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// Moisture Simulation
+setInterval(function(){
+  let moisture = Math.floor(Math.random()*100);
+  document.getElementById("moisture").innerText = moisture + "%";
+  document.getElementById("progressBar").style.width = moisture + "%";
+
+  if(autoMode){
+    if(moisture < 40){
+      pumpOn();
+    } else {
+      pumpOff();
+    }
+  }
+
+},3000);
+
+// Water Level Simulation
+setInterval(function(){
+  let level = Math.floor(Math.random()*100);
+  document.getElementById("waterFill").style.width = level + "%";
+},5000);
+
+function pumpOn(){
+  pumpState = true;
+  document.getElementById("pumpBadge").innerText="ON";
+  document.getElementById("pumpBadge").className="badge badge-on";
+}
+
+function pumpOff(){
+  pumpState = false;
+  document.getElementById("pumpBadge").innerText="OFF";
+  document.getElementById("pumpBadge").className="badge badge-off";
+}
+
+function toggleMode(){
+  autoMode = !autoMode;
+  alert("Auto Mode: " + (autoMode ? "Enabled" : "Disabled"));
+}
+
+</script>
+
+</body>
+</html>
